@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  nest-api:
+    container_name: ${NEST_CONTAINER_NAME}
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '${NEST_PORT_EXTERNAL}:${NEST_PORT_INTERNAL}'
+    depends_on:
+      - mariadb
+    env_file:
+      - .env.docker
+
+  mariadb:
+    image: mariadb:latest
+    container_name: ${DB_CONTAINER_NAME}
+    restart: always
+    ports:
+      - '${DB_PORT_EXTERNAL}:${DB_PORT_INTERNAL}'
+    env_file:
+      - .env.docker
+    volumes:
+      - mariadb:/var/lib/mysql
+
+volumes:
+  mariadb:
+    name: ${VOLUME_NAME}
