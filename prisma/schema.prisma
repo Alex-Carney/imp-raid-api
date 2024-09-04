@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // MariaDB is compatible with MySQL
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id               Int               @id @default(autoincrement())
+  name             String
+  raidParticipants RaidParticipant[]
+}
+
+model RaidCompletion {
+  id               Int               @id @default(autoincrement())
+  raidType         RaidType
+  completionTime   DateTime          @default(now())
+  raidParticipants RaidParticipant[]
+}
+
+model RaidParticipant {
+  id               Int            @id @default(autoincrement())
+  raidCompletion   RaidCompletion @relation(fields: [raidCompletionId], references: [id])
+  raidCompletionId Int
+  player           Player         @relation(fields: [playerId], references: [id])
+  playerId         Int
+  // future option: Player stats here? Like if there's a client mod, damage dealt?
+}
+
+enum RaidType {
+  TCC
+  NOL
+  NOG
+  TNA
+}
