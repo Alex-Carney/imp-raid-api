@@ -3,14 +3,21 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import { ApiKey, Role } from '@prisma/client';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly reflector: Reflector,
+  ) {}
+
+  private readonly logger = new Logger(ApiKeyGuard.name);
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -18,6 +25,7 @@ export class ApiKeyGuard implements CanActivate {
     const requiredRole = this.getRequiredRole(context);
 
     if (!apiKey) {
+      this.logger.warn('Request was made without an API key');
       throw new UnauthorizedException('API key is missing');
     }
 
@@ -32,10 +40,14 @@ export class ApiKeyGuard implements CanActivate {
       !apiKeyRecord ||
       !(await this.validateApiKey(apiKey, apiKeyRecord.keyHash))
     ) {
+      this.logger.warn('Request was made with an invalid API key');
       throw new UnauthorizedException('Invalid API key');
     }
 
     if (requiredRole === Role.ADMIN && apiKeyRecord.role !== Role.ADMIN) {
+      this.logger.warn(
+        'Request was made with an API key that lacks admin privileges',
+      );
       throw new UnauthorizedException('Admin privileges required');
     }
 
@@ -62,11 +74,18 @@ export class ApiKeyGuard implements CanActivate {
   }
 
   private getRequiredRole(context: ExecutionContext): Role {
-    const handler = context.getHandler();
-    const role: Role = Reflect.getMetadata('role', handler);
+    let role = this.reflector.get<Role>('role', context.getHandler());
+
+    // If not defined at the method level, check the controller (class) level
+    if (!role) {
+      role = this.reflector.get<Role>('role', context.getClass());
+    }
+
+    // If still not defined, throw an error
     if (!role) {
       throw new Error('DEV ERROR: Role metadata is not defined');
     }
+
     return role;
   }
 }

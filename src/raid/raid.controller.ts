@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
   SetMetadata,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -35,6 +36,8 @@ import { Role } from '@prisma/client';
 @SetMetadata('role', Role.USER)
 export class RaidController {
   constructor(private readonly raidService: RaidService) {}
+
+  private readonly logger = new Logger(RaidController.name);
 
   @Post('create')
   @ApiOperation({ summary: 'Create a new raid completion' })

@@ -1,4 +1,11 @@
-import { Controller, Post, UseGuards, Body, SetMetadata } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  SetMetadata,
+  Logger,
+} from '@nestjs/common';
 import { ApiKeyGuard } from './api-key.guard';
 import { AuthService } from './auth.service';
 import {
@@ -17,6 +24,7 @@ import { Role } from '@prisma/client';
 @UseGuards(ApiKeyGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+  private readonly logger = new Logger(AuthController.name);
 
   @Post('generate-api-key')
   @SetMetadata('role', Role.ADMIN)
@@ -31,6 +39,7 @@ export class AuthController {
     type: CreateApiKeyDto,
   })
   async generateApiKey(@Body() { description }: CreateApiKeyDto) {
+    this.logger.warn('Generating new API key');
     return this.authService.generateAndRegisterApiKey(description);
   }
 }
