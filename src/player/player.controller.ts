@@ -17,7 +17,10 @@ export class PlayerController {
 
   @Post()
   create(@Body() createPlayerDto: CreatePlayerDto) {
-    return this.playerService.create(createPlayerDto);
+    return this.playerService.create(
+      createPlayerDto.username,
+      createPlayerDto.uuid,
+    );
   }
 
   @Get()
@@ -32,7 +35,11 @@ export class PlayerController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playerService.update(+id, updatePlayerDto);
+    return this.playerService.update(
+      +id,
+      updatePlayerDto.username,
+      updatePlayerDto.uuid,
+    );
   }
 
   @Delete(':id')

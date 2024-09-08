@@ -9,6 +9,7 @@ import {
   IsNotEmpty,
   IsString,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateRaidCompletionDto {
   @ApiProperty({
@@ -33,7 +34,7 @@ export class CreateRaidCompletionDto {
   @ArrayMaxSize(4, { message: 'players array must contain exactly 4 players' })
   @IsString({ each: true, message: 'Each player must be a string' })
   @IsNotEmpty({ each: true, message: 'Player name cannot be empty' })
-  players: string[];
+  playerUsernames: string[];
 
   @ApiProperty({
     description:
@@ -46,5 +47,6 @@ export class CreateRaidCompletionDto {
     {},
     { message: 'completionTime must be a valid ISO 8601 datetime string' },
   )
-  completionTime?: string;
+  @Type(() => Date)
+  completionTime?: Date;
 }

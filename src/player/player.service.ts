@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
 import { PrismaService } from 'nestjs-prisma';
+import { Player } from '@prisma/client';
 
 @Injectable()
 export class PlayerService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createPlayerDto: CreatePlayerDto) {
+  create(username: string, uuid?: string): Promise<Player> {
     return this.prisma.player.create({
-      data: createPlayerDto,
+      data: {
+        username,
+        uuid,
+      },
     });
   }
 
@@ -41,12 +43,12 @@ export class PlayerService {
     });
   }
 
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
+  update(id: number, username: string, uuid?: string) {
     return this.prisma.player.update({
       where: {
         id,
       },
-      data: updatePlayerDto,
+      data: { username, uuid },
     });
   }
 
