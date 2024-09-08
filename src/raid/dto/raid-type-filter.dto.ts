@@ -1,10 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { RaidType } from '@prisma/client';
 import { DateFilterDto } from './date-filter.dto'; // Import the RaidType enum
 
-export class RaidCompletionByTypeDto extends PartialType(DateFilterDto) {
+export class RaidCompletionByTypeDto extends DateFilterDto {
   @ApiProperty({
     description: 'Type of the raid',
     enum: RaidType,
