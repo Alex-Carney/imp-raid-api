@@ -17,6 +17,7 @@ async function bootstrap() {
     .setDescription('API Description')
     .setVersion('1.0')
     .addTag('imp-raid-api')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
