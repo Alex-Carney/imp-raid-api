@@ -4,6 +4,19 @@ import { hash } from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
+  const env = process.env.NODE_ENV;
+  console.log(`Seeding for environment: ${env}`);
+
+  if (env === 'development') {
+    await seedDevelopment();
+  }
+
+  if (env === 'test') {
+    await seedTest();
+  }
+}
+
+async function seedDevelopment() {
   const adminApiKey = process.env.ADMIN_API_KEY;
 
   if (!adminApiKey) {
@@ -21,8 +34,31 @@ async function main() {
       role: Role.ADMIN,
     },
   });
-
   console.log('Admin API Key has been seeded.');
+}
+
+async function seedTest() {
+  const testApiKeyAdmin = 'admin-test-api-key';
+  await prisma.apiKey.upsert({
+    where: { keyHash: testApiKeyAdmin },
+    update: {},
+    create: {
+      keyHash: testApiKeyAdmin,
+      description: 'Test API Key',
+      role: Role.ADMIN,
+    },
+  });
+
+  const testApikeyUser = 'user-test-api-key';
+  await prisma.apiKey.upsert({
+    where: { keyHash: testApikeyUser },
+    update: {},
+    create: {
+      keyHash: testApikeyUser,
+      description: 'Test API Key',
+      role: Role.USER,
+    },
+  });
 }
 
 main()

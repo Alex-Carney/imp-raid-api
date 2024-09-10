@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: e2e-tests-db
+    env_file:
+      - .env.e2e-tests
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
+    name: e2e-tests-db-data
