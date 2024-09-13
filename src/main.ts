@@ -7,7 +7,6 @@ import { AppModule } from './app.module';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { ValidationError } from 'class-validator';
 import helmet from 'helmet';
-import * as compression from 'compression';
 import { LoggingInterceptor } from './common/logger.interceptor';
 
 async function bootstrap() {
@@ -66,12 +65,6 @@ async function bootstrap() {
   const helmetConfig = configService.get('helmet');
   if (helmetConfig && helmetConfig.enabled) {
     app.use(helmet());
-  }
-
-  // Compression - Uses gzip. Offload to a reverse proxy like Nginx for production
-  const compressionConfig = configService.get('compression');
-  if (compressionConfig && compressionConfig.enabled) {
-    app.use(compression());
   }
 
   // Listen on the configured port

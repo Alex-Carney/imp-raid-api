@@ -19,9 +19,6 @@ const config: Config = {
   helmet: {
     enabled: true,
   },
-  compression: {
-    enabled: true,
-  },
 };
 
 export default (): Config => config;

@@ -9,7 +9,7 @@ services:
     ports:
       - '${NEST_PORT_EXTERNAL}:${NEST_PORT_INTERNAL}'
     depends_on:
-      - mariadb
+      - postgres
     env_file:
       - .env.docker
 

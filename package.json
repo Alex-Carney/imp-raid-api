@@ -19,7 +19,7 @@
     "seed": "prisma db seed",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:e2e:cov": "jest --config ./test/jest-e2e.json --coverage",
-    "docker:build": "docker-compose --env-file .env.docker build",
+    "docker:build": "docker-compose --env-file .env.docker build --no-cache",
     "docker": "docker-compose --env-file .env.docker up -d"
   },
   "dependencies": {
@@ -45,6 +45,8 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
+    "@swc/cli": "^0.4.0",
+    "@swc/core": "^1.7.26",
     "@types/bcrypt": "^5.0.2",
     "@types/compression": "^1.7.5",
     "@types/express": "^4.17.17",
@@ -83,5 +85,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

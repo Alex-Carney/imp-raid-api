@@ -4,11 +4,6 @@ export interface Config {
   swagger: SwaggerConfig;
   nest: NestConfig;
   helmet: HelmetConfig;
-  compression: CompressionConfig;
-}
-
-export interface CompressionConfig {
-  enabled: boolean;
 }
 
 export interface HelmetConfig {

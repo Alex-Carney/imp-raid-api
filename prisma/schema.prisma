@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql" // MariaDB is compatible with MySQL
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
