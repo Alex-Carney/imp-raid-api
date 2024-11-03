@@ -26,7 +26,7 @@ import { UpdateRaidCompletionDto } from './dto/update-raid-completion.dto';
 import { DateFilterDto } from './dto/date-filter.dto';
 import { RaidCompletionByTypeDto } from './dto/raid-type-filter.dto';
 import { RaidCompletionsByPlayerDto } from './dto/player-filter.dto';
-import { ApiKeyGuard } from '../auth/api-key.guard';
+import { ApiKeyGuard } from '../../auth/api-key.guard';
 import { Role } from '@prisma/client';
 
 @ApiTags('Raid')

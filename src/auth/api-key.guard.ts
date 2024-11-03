@@ -29,12 +29,20 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException('API key is missing');
     }
 
+    this.logger.debug(`Found api key: $${apiKey}$`);
+
+    const incomingKeyHash = await this.hashApiKey(apiKey);
+
+    this.logger.debug(`Attempting to find ${incomingKeyHash}`);
+
     // Fetch the API key record from the database by matching the hashed API key
     const apiKeyRecord: ApiKey = await this.prisma.apiKey.findFirst({
       where: {
         keyHash: await this.hashApiKey(apiKey),
       },
     });
+
+    this.logger.debug(`Found api key record ${apiKeyRecord}`);
 
     if (
       !apiKeyRecord ||
@@ -56,6 +64,7 @@ export class ApiKeyGuard implements CanActivate {
 
   private extractApiKey(request: any): string | null {
     const authorizationHeader = request.headers['authorization'];
+    this.logger.debug(`Request made with Auth Header: ${authorizationHeader}`);
     if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
       return authorizationHeader.split(' ')[1];
     }
@@ -70,7 +79,7 @@ export class ApiKeyGuard implements CanActivate {
   }
 
   private async hashApiKey(apiKey: string): Promise<string> {
-    return hash(apiKey, 10);
+    return hash(apiKey, 0);
   }
 
   private getRequiredRole(context: ExecutionContext): Role {

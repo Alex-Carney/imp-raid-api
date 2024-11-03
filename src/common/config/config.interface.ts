@@ -4,6 +4,7 @@ export interface Config {
   swagger: SwaggerConfig;
   nest: NestConfig;
   helmet: HelmetConfig;
+  discord: DiscordConfig;
 }
 
 export interface HelmetConfig {
@@ -33,4 +34,9 @@ export interface SwaggerConfig {
   description: string;
   version: string;
   path: string;
+}
+
+export interface DiscordConfig {
+  enabled: boolean;
+  discordToken: string;
 }

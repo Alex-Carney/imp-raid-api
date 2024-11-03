@@ -19,6 +19,10 @@ const config: Config = {
   helmet: {
     enabled: true,
   },
+  discord: {
+    enabled: true,
+    discordToken: process.env.DISCORD_BOT_TOKEN || 'EXAMPLE_TOKEN',
+  },
 };
 
 export default (): Config => config;

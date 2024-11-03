@@ -20,7 +20,7 @@ import {
 import { PlayerService } from './player.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
-import { ApiKeyGuard } from '../auth/api-key.guard';
+import { ApiKeyGuard } from '../../auth/api-key.guard';
 import { Role } from '@prisma/client';
 
 @ApiTags('Player')

@@ -27,7 +27,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  // app.useGlobalInterceptors(new LoggingInterceptor());
 
   // Enable shutdown hooks
   app.enableShutdownHooks();

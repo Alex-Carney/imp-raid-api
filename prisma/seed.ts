@@ -23,7 +23,11 @@ async function seedDevelopment() {
     console.error('ADMIN_API_KEY is not set in the environment variables.');
     process.exit(1);
   }
-  const hashedApiKey = await hash(adminApiKey, 10);
+  const hashedApiKey = await hash(adminApiKey, 0);
+
+  console.log(
+    `Adding record with plaintext $${adminApiKey}$ and hashed key ${hashedApiKey}`,
+  );
 
   await prisma.apiKey.upsert({
     where: { keyHash: hashedApiKey },
